@@ -76,12 +76,12 @@
         <main>
             <section class="grid md:grid-cols-4 gap-4 mb-8">
                 <div class="p-4 bg-amber-400 text-white rounded-lg shadow-lg text-center">
-                    <h2 class="text-xl font-bold mb-1">🏆 이달의 발표 왕 🏆</h2>
-                    <div id="potm-content"><p>데이터를 기록하여 이번 달 최고의 발표자를 확인하세요!</p></div>
+                    <h2 class="text-xl font-bold mb-1">🏆 이달의 패키지 누적 왕 🏆</h2>
+                    <div id="potm-content"><p>데이터를 기록하여 이번 달 최고의 등록자를 확인하세요!</p></div>
                 </div>
                 <div class="p-4 bg-teal-600 text-white rounded-lg shadow-lg text-center">
-                    <h2 class="text-xl font-bold mb-1">🏅 지난달 발표 왕 🏅</h2>
-                    <div id="lpm-content"><p>지난달 기록이 없습니다.</p></div>
+                    <h2 class="text-xl font-bold mb-1">🏅 이달의 최고 평점 패키지 🏅</h2>
+                    <div id="lpm-content"><p>이번 달 기록이 아직 없습니다.</p></div>
                 </div>
                  <div class="p-4 bg-sky-600 text-white rounded-lg shadow-lg text-center">
                     <h2 class="text-xl font-bold mb-1">📢 다음주 발표 📢</h2>
@@ -94,28 +94,48 @@
             </section>
 
             <section id="analytics" class="p-6 bg-white rounded-lg shadow-md mb-8">
-                <div class="grid lg:grid-cols-3 gap-8">
+                <div class="grid lg:grid-cols-3 gap-8 items-center">
                     <div class="chart-container"><canvas id="presenter-chart"></canvas></div>
                     <div class="chart-container"><canvas id="region-chart"></canvas></div>
-                    <div class="chart-container"><canvas id="winner-chart"></canvas></div>
+                    <div id="weekly-submitters-panel" class="p-4 bg-green-100 rounded-lg h-full flex flex-col justify-center">
+                        <h3 class="text-lg font-bold text-green-800 text-center mb-3">주간 등록 현황 (월요일 11시 기준)</h3>
+                        <div id="weekly-submitters-list" class="text-center text-gray-600">
+                            <p>이번 주 등록자를 불러오는 중...</p>
+                        </div>
+                    </div>
                 </div>
             </section>
             
             <section id="dashboard">
                 <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
-                    <h2 class="text-2xl font-bold text-teal-700">발표 아카이브</h2>
-                    <div class="flex gap-2">
+                    <h2 class="text-2xl font-bold text-teal-700">콘텐츠 아카이브</h2>
+                    <div class="flex gap-2 flex-wrap justify-end">
                          <button id="manage-announcements-btn" class="w-full sm:w-auto bg-sky-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-sky-700 transition">
                             주간 공지 관리
                         </button>
                         <button id="add-presentation-btn" class="w-full sm:w-auto bg-teal-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-teal-700 transition">
                             발표 작성하기
                         </button>
+                        <button id="add-package-btn" class="w-full sm:w-auto bg-green-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-700 transition">
+                            패키지 등록
+                        </button>
+                    </div>
+                </div>
+                <div class="p-4 bg-white rounded-lg shadow-md mb-6 grid md:grid-cols-2 gap-4 items-end">
+                    <div>
+                        <label for="search-input" class="text-sm font-semibold text-gray-600">검색</label>
+                        <input type="text" id="search-input" placeholder="주제, 작성자, 키워드로 검색..." class="mt-1 block w-full border-stone-300 rounded-md shadow-sm">
+                    </div>
+                    <div>
+                        <label for="filter-presenter" class="text-sm font-semibold text-gray-600">작성자별 보기 (마이페이지)</label>
+                        <select id="filter-presenter" class="mt-1 block w-full border-stone-300 rounded-md shadow-sm">
+                            <option value="">모두 보기</option>
+                        </select>
                     </div>
                 </div>
                 <div id="record-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 items-start"></div>
                 <div id="pagination-controls" class="flex justify-center mt-8"></div>
-                <p id="no-results" class="text-center text-stone-500 py-8 hidden">표시할 기록이 없습니다. '발표 작성하기' 버튼으로 시작해보세요.</p>
+                <p id="no-results" class="text-center text-stone-500 py-8 hidden">표시할 기록이 없습니다.</p>
             </section>
 
         </main>
@@ -146,7 +166,61 @@
                 <label for="p-is-training" class="ml-2 block text-sm text-gray-900">평가 없음 (교육)</label>
             </div>
             <div><label for="p-images">이미지 첨부 (크기 제한 있음)</label><input type="file" id="p-images" multiple accept="image/*" class="mt-1 block w-full text-sm text-stone-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100"></div>
-            <div><label for="p-files">파일 첨부 (이름만 저장됨)</label><input type="file" id="p-files" multiple class="mt-1 block w-full text-sm text-stone-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-stone-50 file:text-stone-700 hover:file:bg-stone-100"></div>
+            <div><label for="p-files">파일 첨부 (5MB 제한)</label><input type="file" id="p-files" multiple class="mt-1 block w-full text-sm text-stone-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-stone-50 file:text-stone-700 hover:file:bg-stone-100"></div>
+            <div class="flex justify-end gap-2"><button type="button" class="form-cancel-btn px-4 py-2 rounded-lg border">취소</button><button type="submit" class="bg-teal-600 text-white px-4 py-2 rounded-lg">저장</button></div>
+        </form>
+    </div>
+
+    <div id="package-submission-modal" class="modal fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center p-4 z-50">
+        <form class="bg-white rounded-lg shadow-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto p-6 space-y-4">
+            <h3 class="text-2xl font-bold text-green-700">패키지 등록</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label for="ps-month">월</label>
+                        <select id="ps-month" class="mt-1 block w-full border-stone-300 rounded-md shadow-sm"></select>
+                    </div>
+                    <div>
+                        <label for="ps-week">주차</label>
+                        <select id="ps-week" class="mt-1 block w-full border-stone-300 rounded-md shadow-sm">
+                            <option value="1주차">1주차</option><option value="2주차">2주차</option><option value="3주차">3주차</option><option value="4주차">4주차</option><option value="5주차">5주차</option>
+                        </select>
+                    </div>
+                </div>
+                <div><label for="ps-presenter">작성자</label><input type="text" id="ps-presenter" required class="mt-1 block w-full border-stone-300 rounded-md shadow-sm"></div>
+            </div>
+            <div><label for="ps-topic">글 제목 (자동 생성)</label><input type="text" id="ps-topic" readonly class="mt-1 block w-full border-stone-300 rounded-md shadow-sm bg-gray-100"></div>
+            
+            <div class="p-4 my-2 border-t border-b border-stone-200 space-y-3">
+                <h4 class="font-semibold text-stone-700">패키지 링크 등록</h4>
+                <div id="ps-package-inputs-container" class="space-y-2">
+                    <!-- Dynamic inputs will go here -->
+                </div>
+                <button type="button" id="add-package-input-btn" class="text-sm bg-stone-200 text-stone-700 font-bold py-1 px-3 rounded-lg hover:bg-stone-300 transition">+ 패키지 추가</button>
+            </div>
+            <div class="flex justify-end gap-2"><button type="button" class="form-cancel-btn px-4 py-2 rounded-lg border">취소</button><button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-lg">저장</button></div>
+        </form>
+    </div>
+
+    <div id="package-rating-modal" class="modal fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center p-4 z-50">
+        <form class="bg-white rounded-lg shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto p-6 space-y-4">
+            <input type="hidden" id="pr-presentation-id">
+            <input type="hidden" id="pr-package-index">
+            <h3 class="text-2xl font-bold text-teal-700">패키지 코멘트 작성</h3>
+            <p class="font-semibold text-stone-600 bg-stone-100 p-2 rounded">패키지: <span id="pr-package-title"></span></p>
+            <div><label for="pr-commenter">평가자 이름</label><input type="text" id="pr-commenter" required class="mt-1 block w-full border-stone-300 rounded-md shadow-sm"></div>
+            <div class="flex items-center">
+                <label>점수</label>
+                <div class="star-rating ml-4" id="pr-rating">
+                    <input type="radio" id="pr-star5" name="pr-rating" value="5"><label for="pr-star5">★</label>
+                    <input type="radio" id="pr-star4" name="pr-rating" value="4"><label for="pr-star4">★</label>
+                    <input type="radio" id="pr-star3" name="pr-rating" value="3"><label for="pr-star3">★</label>
+                    <input type="radio" id="pr-star2" name="pr-rating" value="2"><label for="pr-star2">★</label>
+                    <input type="radio" id="pr-star1" name="pr-rating" value="1"><label for="pr-star1">★</label>
+                </div>
+                <span id="pr-rating-display" class="ml-4 font-bold text-lg text-amber-500">0</span>
+            </div>
+            <div><label for="pr-comment">코멘트</label><textarea id="pr-comment" rows="3" class="mt-1 block w-full border-stone-300 rounded-md shadow-sm"></textarea></div>
             <div class="flex justify-end gap-2"><button type="button" class="form-cancel-btn px-4 py-2 rounded-lg border">취소</button><button type="submit" class="bg-teal-600 text-white px-4 py-2 rounded-lg">저장</button></div>
         </form>
     </div>
@@ -247,6 +321,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, doc, addDoc, setDoc, deleteDoc, onSnapshot, query, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
 
         // Your web app's Firebase configuration
         const firebaseConfig = {
@@ -263,6 +338,7 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
+        const storage = getStorage(app);
 
         // ===================================================================================
         // !! 중요: Firestore 보안 규칙 !!
@@ -287,8 +363,12 @@
         let presentationsCollection;
         let weeklyAnnouncementsDocRef;
         let userId;
+        let currentSearchTerm = '';
+        let currentFilterPresenter = '';
 
         const presentationModal = document.getElementById('presentation-modal');
+        const packageSubmissionModal = document.getElementById('package-submission-modal');
+        const packageRatingModal = document.getElementById('package-rating-modal');
         const feedbackModal = document.getElementById('feedback-modal');
         const trainingFeedbackModal = document.getElementById('training-feedback-modal');
         const detailModal = document.getElementById('presentation-detail-modal');
@@ -297,6 +377,7 @@
         const announcementModal = document.getElementById('announcement-modal');
         
         let onConfirmCallback = null;
+        const REGIONS = ['세일즈', '유럽', '하와이', '몰디브', '칸쿤', '태국', '발리', '괌사이판', '호주', '모리셔스', '베트남', 'UAE', '기타'];
 
         // --- Auth Listener ---
         onAuthStateChanged(auth, user => {
@@ -390,11 +471,25 @@
             return text.replace(urlRegex, url => `<a href="${url}" target="_blank" class="text-blue-600 hover:underline">${url}</a>`);
         };
 
+        const getFilteredRecords = () => {
+            return records.filter(rec => {
+                const searchTerm = currentSearchTerm.toLowerCase();
+                const presenterMatch = currentFilterPresenter === '' || rec.presenter === currentFilterPresenter;
+                const searchMatch = searchTerm === '' ||
+                    (rec.topic && rec.topic.toLowerCase().includes(searchTerm)) ||
+                    (rec.presenter && rec.presenter.toLowerCase().includes(searchTerm)) ||
+                    (rec.keywords && rec.keywords.toLowerCase().includes(searchTerm));
+                return presenterMatch && searchMatch;
+            });
+        };
+
         const renderRecords = () => {
             const listEl = document.getElementById('record-list');
             listEl.innerHTML = '';
             
-            const sortedRecords = [...records].sort((a, b) => {
+            const filteredRecords = getFilteredRecords();
+
+            const sortedRecords = [...filteredRecords].sort((a, b) => {
                 const dateComparison = new Date(b.date) - new Date(a.date);
                 if (dateComparison !== 0) return dateComparison;
                 return b.id.localeCompare(a.id);
@@ -405,57 +500,140 @@
             const paginatedRecords = sortedRecords.slice(startIndex, startIndex + itemsPerPage);
 
             paginatedRecords.forEach(rec => {
-                const isTraining = rec.isTraining || false;
-                const totalScore = (rec.feedbacks || []).reduce((sum, f) => sum + (f.rating || 0), 0);
-                const ratedFeedbacks = (rec.feedbacks || []).filter(f => f.rating !== undefined);
-                const avgScore = ratedFeedbacks.length > 0 ? (totalScore / ratedFeedbacks.length).toFixed(1) : '0.0';
-                
-                const card = document.createElement('div');
-                card.className = `card flex flex-col rounded-lg shadow-md overflow-hidden ${isTraining ? 'training-card bg-gray-800 text-white' : 'bg-white'}`;
-                
-                let scoreSectionHTML = '';
-                if (!isTraining) {
-                    scoreSectionHTML = `
-                    <div class="p-4 border-b bg-stone-50 flex justify-between items-baseline">
-                        <p class="text-md font-bold text-amber-500 flex items-center"><span class="text-xl mr-1">★</span> ${avgScore}</p>
-                        <p class="text-xs text-stone-500"><코멘트 ${(rec.feedbacks || []).length}개></p>
-                    </div>`;
+                // For backward compatibility, if type is not defined, treat it as a presentation.
+                if (rec.type === 'package_submission') {
+                    renderPackageCard(rec, listEl);
                 } else {
-                     scoreSectionHTML = `
-                    <div class="p-4 border-b bg-gray-700 flex justify-between items-baseline">
-                        <p class="text-md font-bold text-gray-300">교육 자료</p>
-                        <p class="text-xs text-gray-400"><코멘트 ${(rec.feedbacks || []).length}개></p>
-                    </div>`;
+                    renderPresentationCard(rec, listEl);
                 }
-
-                card.innerHTML = `
-                    <div class="p-4 border-b flex-grow ${isTraining ? 'border-gray-700' : ''}">
-                        <div class="flex justify-between items-start">
-                            <p class="text-xs ${isTraining ? 'text-gray-400' : 'text-stone-500'}">${rec.date}</p>
-                            <button data-id="${rec.id}" data-action="delete-presentation" class="${isTraining ? 'text-gray-500 hover:text-red-400' : 'text-stone-400 hover:text-red-500'} text-xl">&times;</button>
-                        </div>
-                        <h3 class="text-md font-bold mt-1 truncate ${isTraining ? 'text-white' : 'text-teal-700'}">${rec.topic}</h3>
-                        <div class="flex justify-between items-baseline mt-1">
-                            <p class="text-sm font-semibold truncate ${isTraining ? 'text-gray-300' : 'text-stone-700'}">${rec.presenter}</p>
-                            <p class="text-xs flex-shrink-0 ml-2 ${isTraining ? 'text-gray-400' : 'text-stone-500'}">${rec.travelRegion || ''}</p>
-                        </div>
-                        <button data-id="${rec.id}" data-action="view-full-detail" class="mt-2 w-full ${isTraining ? 'bg-gray-700 hover:bg-gray-600 text-white' : 'bg-teal-100 hover:bg-teal-200 text-teal-800'} text-xs font-bold px-3 py-1 rounded-full">내용 보기</button>
-                    </div>
-                    ${scoreSectionHTML}
-                    <div class="card-detail p-4 space-y-2 ${isTraining ? 'bg-gray-800' : 'bg-stone-50'}">
-                        <div class="p-2 border rounded-md ${isTraining ? 'border-gray-600 bg-gray-700' : 'bg-teal-50'}">
-                            <button data-id="${rec.id}" data-action="${isTraining ? 'add-training-feedback' : 'add-feedback'}" class="w-full text-sm font-bold ${isTraining ? 'text-white hover:underline' : 'text-teal-700 hover:underline'}">+ 코멘트 추가</button>
-                        </div>
-                        <div class="space-y-3" data-feedback-list="general" data-id="${rec.id}"></div>
-                    </div>
-                    <div class="p-2 text-center border-t ${isTraining ? 'border-gray-700' : ''}">
-                        <button data-action="toggle-card" class="text-sm font-bold ${isTraining ? 'text-white' : 'text-teal-700'}">코멘트 열기</button>
-                    </div>
-                `;
-                listEl.appendChild(card);
-                renderFeedback(rec);
             });
-            renderPagination(sortedRecords.length);
+            renderPagination(filteredRecords.length);
+        };
+
+        const renderPresentationCard = (rec, listEl) => {
+            const isTraining = rec.isTraining || false;
+            const totalScore = (rec.feedbacks || []).reduce((sum, f) => sum + (f.rating || 0), 0);
+            const ratedFeedbacks = (rec.feedbacks || []).filter(f => f.rating !== undefined);
+            const avgScore = ratedFeedbacks.length > 0 ? (totalScore / ratedFeedbacks.length).toFixed(1) : '0.0';
+            
+            const card = document.createElement('div');
+            card.className = `card flex flex-col rounded-lg shadow-md overflow-hidden ${isTraining ? 'training-card bg-gray-800 text-white' : 'bg-white'}`;
+            card.dataset.cardType = 'presentation';
+            
+            let scoreSectionHTML = '';
+            if (!isTraining) {
+                scoreSectionHTML = `
+                <div class="p-4 border-b bg-stone-50 flex justify-between items-baseline">
+                    <p class="text-md font-bold text-amber-500 flex items-center"><span class="text-xl mr-1">★</span> ${avgScore}</p>
+                    <p class="text-xs text-stone-500"><코멘트 ${(rec.feedbacks || []).length}개></p>
+                </div>`;
+            } else {
+                 scoreSectionHTML = `
+                <div class="p-4 border-b bg-gray-700 flex justify-between items-baseline">
+                    <p class="text-md font-bold text-gray-300">교육 자료</p>
+                    <p class="text-xs text-gray-400"><코멘트 ${(rec.feedbacks || []).length}개></p>
+                </div>`;
+            }
+
+            card.innerHTML = `
+                <div class="p-4 border-b flex-grow ${isTraining ? 'border-gray-700' : ''}">
+                    <div class="flex justify-between items-start">
+                        <p class="text-xs ${isTraining ? 'text-gray-400' : 'text-stone-500'}">${rec.date}</p>
+                        <button data-id="${rec.id}" data-action="delete-presentation" class="${isTraining ? 'text-gray-500 hover:text-red-400' : 'text-stone-400 hover:text-red-500'} text-xl">&times;</button>
+                    </div>
+                    <h3 class="text-md font-bold mt-1 truncate ${isTraining ? 'text-white' : 'text-teal-700'}">${rec.topic}</h3>
+                    <div class="flex justify-between items-baseline mt-1">
+                        <p class="text-sm font-semibold truncate ${isTraining ? 'text-gray-300' : 'text-stone-700'}">${rec.presenter}</p>
+                        <p class="text-xs flex-shrink-0 ml-2 ${isTraining ? 'text-gray-400' : 'text-stone-500'}">${rec.travelRegion || ''}</p>
+                    </div>
+                    <button data-id="${rec.id}" data-action="view-full-detail" class="mt-2 w-full ${isTraining ? 'bg-gray-700 hover:bg-gray-600 text-white' : 'bg-teal-100 hover:bg-teal-200 text-teal-800'} text-xs font-bold px-3 py-1 rounded-full">내용 보기</button>
+                </div>
+                ${scoreSectionHTML}
+                <div class="card-detail p-4 space-y-2 ${isTraining ? 'bg-gray-800' : 'bg-stone-50'}">
+                    <div class="p-2 border rounded-md ${isTraining ? 'border-gray-600 bg-gray-700' : 'bg-teal-50'}">
+                        <button data-id="${rec.id}" data-action="${isTraining ? 'add-training-feedback' : 'add-feedback'}" class="w-full text-sm font-bold ${isTraining ? 'text-white hover:underline' : 'text-teal-700 hover:underline'}">+ 코멘트 추가</button>
+                    </div>
+                    <div class="space-y-3" data-feedback-list="general" data-id="${rec.id}"></div>
+                </div>
+                <div class="p-2 text-center border-t ${isTraining ? 'border-gray-700' : ''}">
+                    <button data-action="toggle-card" class="text-sm font-bold ${isTraining ? 'text-white' : 'text-teal-700'}">코멘트 열기</button>
+                </div>
+            `;
+            listEl.appendChild(card);
+            renderFeedback(rec);
+        };
+
+        const renderPackageCard = (rec, listEl) => {
+            const card = document.createElement('div');
+            card.className = `card flex flex-col rounded-lg shadow-md overflow-hidden bg-white`;
+            card.dataset.cardType = 'package';
+            
+            const totalPackages = rec.packages ? rec.packages.length : 0;
+
+            card.innerHTML = `
+                <div class="p-4 border-b flex-grow bg-green-50">
+                    <div class="flex justify-between items-start">
+                        <p class="text-xs text-stone-500">${rec.date}</p>
+                        <button data-id="${rec.id}" data-action="delete-presentation" class="text-stone-400 hover:text-red-500 text-xl">&times;</button>
+                    </div>
+                    <h3 class="text-md font-bold mt-1 truncate text-green-800">${rec.topic}</h3>
+                    <div class="flex justify-between items-baseline mt-1">
+                        <p class="text-sm font-semibold truncate text-stone-700">${rec.presenter}</p>
+                    </div>
+                </div>
+                <div class="p-4 border-b bg-stone-50 flex justify-end items-baseline">
+                    <p class="text-xs text-stone-500">패키지 ${totalPackages}개</p>
+                </div>
+                <div class="card-detail p-4 space-y-3 bg-stone-50">
+                    <div class="space-y-3" data-package-list="general" data-id="${rec.id}"></div>
+                </div>
+                <div class="p-2 text-center border-t">
+                    <button data-action="toggle-card" class="text-sm font-bold text-green-700">패키지 보기</button>
+                </div>
+            `;
+            listEl.appendChild(card);
+            renderPackages(rec);
+        };
+
+        const getPackageAvgRating = (pkg) => {
+            if (!pkg.ratings || pkg.ratings.length === 0) return { avg: 0, count: 0 };
+            const totalScore = pkg.ratings.reduce((sum, r) => sum + r.score, 0);
+            return {
+                avg: (totalScore / pkg.ratings.length),
+                count: pkg.ratings.length
+            };
+        };
+
+        const renderPackages = (presentation) => {
+            const packageListEl = document.querySelector(`[data-package-list="general"][data-id="${presentation.id}"]`);
+            if (!packageListEl) return;
+
+            if (presentation.packages && presentation.packages.length > 0) {
+                packageListEl.innerHTML = presentation.packages.map((pkg, index) => {
+                    const ratingInfo = getPackageAvgRating(pkg);
+                    return `
+                    <div class="p-3 border rounded-md bg-white space-y-2">
+                        <div>
+                            <a href="${pkg.link}" target="_blank" class="group font-bold text-stone-800 break-words hover:text-blue-600 transition-colors">
+                                ${pkg.title}
+                                <span class="ml-1 text-xs font-normal text-white bg-blue-500 rounded px-1.5 py-0.5 opacity-0 group-hover:opacity-100 transition-opacity">바로가기</span>
+                            </a>
+                        </div>
+                        <div class="pt-2 border-t">
+                            <div class="text-amber-500 font-bold text-sm">
+                                ★ ${ratingInfo.avg.toFixed(1)} <span class="text-xs text-stone-500 font-normal">(${ratingInfo.count}개 코멘트)</span>
+                            </div>
+                            <div class="flex flex-col gap-1.5 mt-2">
+                                <button class="w-full text-center text-xs font-semibold text-gray-700 bg-gray-200 hover:bg-gray-300 py-1.5 px-3 rounded-md transition" data-action="view-package-ratings" data-pid="${presentation.id}" data-pindex="${index}">코멘트 보기</button>
+                                <button data-action="rate-package" data-pid="${presentation.id}" data-pindex="${index}" class="w-full text-sm bg-amber-400 text-white font-bold py-2 px-3 rounded-md hover:bg-amber-500 transition">코멘트 추가</button>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                }).join('');
+            } else {
+                packageListEl.innerHTML = `<p class="text-sm text-stone-500 text-center">등록된 패키지가 없습니다.</p>`;
+            }
         };
 
         const renderPagination = (totalItems) => {
@@ -476,57 +654,77 @@
 
         const renderFeedback = (presentation) => {
             const feedbackList = document.querySelector(`[data-feedback-list="general"][data-id="${presentation.id}"]`);
-            if (presentation.feedbacks && presentation.feedbacks.length > 0) {
-                feedbackList.innerHTML = presentation.feedbacks.map(f => createFeedbackHTML(f, presentation.id, presentation.isTraining)).join('');
+            // For backward compatibility, check old feedback fields too.
+            const feedbackArray = [
+                ...(presentation.feedbacks || []),
+                ...(presentation.feedback || []),
+                ...(presentation.comments || [])
+            ];
+
+            if (feedbackArray.length > 0) {
+                feedbackList.innerHTML = feedbackArray.map(f => createFeedbackHTML(f, presentation.id, presentation.isTraining)).join('');
             } else {
                 feedbackList.innerHTML = `<p class="text-sm ${presentation.isTraining ? 'text-gray-400' : 'text-stone-500'} text-center">코멘트가 없습니다.</p>`;
             }
         };
 
         const createFeedbackHTML = (f, presentationId, isTraining) => {
+            const id = f.id || (Date.now() + Math.random());
+            const commenter = f.commenter || '익명';
+
             if (isTraining) {
                 return `
                 <div class="feedback-item text-sm p-3 border rounded-md ${isTraining ? 'bg-gray-900 border-gray-700' : 'bg-white'}">
                     <div class="flex justify-between items-center">
-                        <p class="font-bold">${f.commenter}</p>
-                        <button data-pid="${presentationId}" data-fid="${f.id}" data-action="delete-comment" class="text-gray-600 hover:text-red-400 text-lg">&times;</button>
+                        <p class="font-bold">${commenter}</p>
+                        <button data-pid="${presentationId}" data-fid="${id}" data-action="delete-comment" class="text-gray-600 hover:text-red-400 text-lg">&times;</button>
                     </div>
                     <p class="mt-2 pt-2 border-t ${isTraining ? 'border-gray-700 text-gray-300' : 'text-stone-600'} comment-preview">${f.comment || '코멘트 없음'}</p>
                 </div>`;
             }
 
             let starsHTML = '';
-            for(let i = 1; i <= 5; i++) {
-                if (f.rating >= i) starsHTML += '<span class="star full">★</span>';
-                else if (f.rating >= i - 0.5) starsHTML += '<span class="star half">★</span>';
-                else starsHTML += '<span class="star empty">★</span>';
+            if (typeof f.rating === 'number') {
+                for(let i = 1; i <= 5; i++) {
+                    if (f.rating >= i) starsHTML += '<span class="star full">★</span>';
+                    else if (f.rating >= i - 0.5) starsHTML += '<span class="star half">★</span>';
+                    else starsHTML += '<span class="star empty">★</span>';
+                }
             }
+            
+            const commentText = f.reason || f.comment || '종합 코멘트 없음';
+
             return `
             <div class="feedback-item text-sm p-3 border rounded-md bg-white">
                 <div class="flex justify-between items-center">
                     <div class="flex items-center flex-wrap">
-                        <p class="font-bold mr-2">${f.commenter}</p>
+                        <p class="font-bold mr-2">${commenter}</p>
                         <span class="star-display text-amber-500">${starsHTML}</span>
-                        <span class="font-bold ml-1">(${f.rating})</span>
-                        <button class="text-xs text-blue-600 hover:underline ml-3" data-action="view-comment-in-popup" data-pid="${presentationId}" data-fid="${f.id}">전문보기</button>
+                        <span class="font-bold ml-1">${typeof f.rating === 'number' ? `(${f.rating})` : ''}</span>
+                        <button class="text-xs text-blue-600 hover:underline ml-3" data-action="view-comment-in-popup" data-pid="${presentationId}" data-fid="${id}">전문보기</button>
                     </div>
-                    <button data-pid="${presentationId}" data-fid="${f.id}" data-action="delete-comment" class="text-stone-300 hover:text-red-500 text-lg">&times;</button>
+                    <button data-pid="${presentationId}" data-fid="${id}" data-action="delete-comment" class="text-stone-300 hover:text-red-500 text-lg">&times;</button>
                 </div>
-                <p class="mt-2 pt-2 border-t text-stone-600 comment-preview">${f.reason || '종합 코멘트 없음'}</p>
+                <p class="mt-2 pt-2 border-t text-stone-600 comment-preview">${commentText}</p>
             </div>
         `};
 
         const renderAnalytics = () => {
             const evaluatedRecords = records.filter(r => !r.isTraining);
-            const presenterData = evaluatedRecords.reduce((acc, r) => { acc[r.presenter] = (acc[r.presenter] || 0) + 1; return acc; }, {});
-            renderChart('presenter-chart', 'bar', { labels: Object.keys(presenterData), datasets: [{ label: '발표 횟수', data: Object.values(presenterData), backgroundColor: 'rgba(13, 148, 136, 0.6)' }] }, { title: '발표자별 참여 횟수' });
+            const presenterData = records.reduce((acc, r) => { acc[r.presenter] = (acc[r.presenter] || 0) + 1; return acc; }, {});
+            renderChart('presenter-chart', 'bar', { labels: Object.keys(presenterData), datasets: [{ label: '총 등록 횟수', data: Object.values(presenterData), backgroundColor: 'rgba(13, 148, 136, 0.6)' }] }, { title: '작성자별 참여 횟수' });
 
-            const regionData = records.reduce((acc, r) => { if(r.travelRegion) acc[r.travelRegion] = (acc[r.travelRegion] || 0) + 1; return acc; }, {});
-            renderChart('region-chart', 'pie', { labels: Object.keys(regionData), datasets: [{ data: Object.values(regionData), backgroundColor: ['#14b8a6', '#0d9488', '#0f766e', '#115e59', '#f59e0b', '#d97706', '#b45309', '#64748b', '#ef4444', '#dc2626', '#9333ea', '#7e22ce'] }] }, { title: '발표국가 현황', datalabels: { color: '#fff', font: { weight: 'bold' } } });
-            
-            const monthlyWinners = calculateMonthlyWinners();
-            const winnerCounts = Object.values(monthlyWinners).flat().reduce((acc, winner) => { acc[winner.presenter] = (acc[winner.presenter] || 0) + 1; return acc; }, {});
-            renderChart('winner-chart', 'bar', { labels: Object.keys(winnerCounts), datasets: [{ label: '월간 우승 횟수', data: Object.values(winnerCounts), backgroundColor: 'rgba(245, 158, 11, 0.6)' }] }, { title: '월간 우승 횟수' });
+            const regionData = records.reduce((acc, r) => {
+                if (r.type === 'package_submission' && r.packages) {
+                    r.packages.forEach(p => {
+                        if (p.country) acc[p.country] = (acc[p.country] || 0) + 1;
+                    });
+                } else if (r.travelRegion) {
+                    acc[r.travelRegion] = (acc[r.travelRegion] || 0) + 1;
+                }
+                return acc;
+            }, {});
+            renderChart('region-chart', 'pie', { labels: Object.keys(regionData), datasets: [{ data: Object.values(regionData), backgroundColor: ['#14b8a6', '#0d9488', '#0f766e', '#115e59', '#f59e0b', '#d97706', '#b45309', '#64748b', '#ef4444', '#dc2626', '#9333ea', '#7e22ce'] }] }, { title: '지역별 현황', datalabels: { color: '#fff', font: { weight: 'bold' } } });
         };
         
         const renderChart = (canvasId, type, data, options) => {
@@ -546,53 +744,93 @@
             });
         };
 
-        const calculateMonthlyWinners = () => {
-            const evaluatedRecords = records.filter(r => !r.isTraining);
-            const presentationsByMonth = evaluatedRecords.reduce((acc, rec) => {
-                const month = getYearMonth(new Date(rec.date));
-                if (!acc[month]) acc[month] = [];
-                acc[month].push(rec);
-                return acc;
-            }, {});
+        const renderWeeklySubmitters = () => {
+            const listEl = document.getElementById('weekly-submitters-list');
+            const now = new Date();
+            const dayOfWeek = now.getDay(); // Sunday = 0, Monday = 1, ...
+            const diff = now.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1); // Adjust when Sunday
+            const mondayThisWeek = new Date(new Date().setDate(diff));
+            mondayThisWeek.setHours(0, 0, 0, 0);
+            
+            const deadline = new Date(mondayThisWeek);
+            deadline.setDate(deadline.getDate() + 7);
+            deadline.setHours(11, 0, 0, 0);
 
-            const monthlyWinners = {};
-            for (const month in presentationsByMonth) {
-                const presentersInMonth = {};
-                presentationsByMonth[month].forEach(rec => {
-                    const feedbacks = rec.feedbacks || [];
-                    if (!presentersInMonth[rec.presenter]) presentersInMonth[rec.presenter] = { totalScore: 0, feedbackCount: 0 };
-                    presentersInMonth[rec.presenter].feedbackCount += feedbacks.length;
-                    presentersInMonth[rec.presenter].totalScore += feedbacks.reduce((sum, f) => sum + (f.rating || 0), 0);
-                });
+            const weeklyRecords = records.filter(rec => {
+                if (rec.type !== 'package_submission') return false;
+                const recDate = rec.createdAt?.toDate ? rec.createdAt.toDate() : new Date(rec.date);
+                return recDate >= mondayThisWeek && recDate < deadline;
+            });
 
-                let topPresenters = [], maxAvgScore = -1;
-                for (const presenter in presentersInMonth) {
-                    const data = presentersInMonth[presenter];
-                    const avgScore = data.feedbackCount > 0 ? data.totalScore / data.feedbackCount : 0;
-                    if (avgScore > maxAvgScore) {
-                        maxAvgScore = avgScore;
-                        topPresenters = [presenter];
-                    } else if (avgScore.toFixed(1) === maxAvgScore.toFixed(1) && maxAvgScore > 0) {
-                        topPresenters.push(presenter);
-                    }
-                }
-                if (topPresenters.length > 0) monthlyWinners[month] = topPresenters.map(p => ({ presenter: p, score: maxAvgScore.toFixed(1) }));
+            const submitters = [...new Set(weeklyRecords.map(rec => rec.presenter))];
+
+            if (submitters.length > 0) {
+                listEl.innerHTML = `<div class="flex flex-wrap justify-center gap-x-3 gap-y-1">${submitters.map(name => `<span class="font-semibold text-green-900 bg-white px-2 py-1 rounded-md shadow-sm">${name}</span>`).join('')}</div>`;
+            } else {
+                listEl.innerHTML = '<p>이번 주 등록자가 아직 없습니다.</p>';
             }
-            return monthlyWinners;
         };
 
         const updateHighlightCards = () => {
-            const winners = calculateMonthlyWinners();
             const now = new Date();
             const currentMonthKey = getYearMonth(now);
-            const lastMonthDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-            const lastMonthKey = getYearMonth(lastMonthDate);
             
-            const potm = winners[currentMonthKey];
-            document.getElementById('potm-content').innerHTML = potm ? `<div class="flex justify-center items-center gap-x-4 gap-y-1 flex-wrap">${potm.map(p => `<p class="text-xl font-bold">${p.presenter} <span class="text-base font-normal">(${p.score}점)</span></p>`).join('')}</div>` : `<p>이번 달 기록이 아직 없습니다.</p>`;
+            const packageRecords = records.filter(r => r.type === 'package_submission');
+            const monthlyPackageRecords = packageRecords.filter(r => getYearMonth(new Date(r.date)) === currentMonthKey);
 
-            const lpm = winners[lastMonthKey];
-            document.getElementById('lpm-content').innerHTML = lpm ? `<div class="flex justify-center items-center gap-x-4 gap-y-1 flex-wrap">${lpm.map(p => `<p class="text-xl font-bold">${p.presenter} <span class="text-base font-normal">(${p.score}점)</span></p>`).join('')}</div>` : `<p>지난달 기록이 없습니다.</p>`;
+            // 1. 이달의 패키지 누적 왕
+            if (monthlyPackageRecords.length > 0) {
+                const packageCounts = monthlyPackageRecords.reduce((acc, rec) => {
+                    acc[rec.presenter] = (acc[rec.presenter] || 0) + (rec.packages?.length || 0);
+                    return acc;
+                }, {});
+
+                let maxCount = 0;
+                let topPresenters = [];
+                for (const presenter in packageCounts) {
+                    if (packageCounts[presenter] > maxCount) {
+                        maxCount = packageCounts[presenter];
+                        topPresenters = [presenter];
+                    } else if (packageCounts[presenter] === maxCount) {
+                        topPresenters.push(presenter);
+                    }
+                }
+                document.getElementById('potm-content').innerHTML = `<div class="flex justify-center items-center gap-x-4 gap-y-1 flex-wrap">${topPresenters.map(p => `<p class="text-xl font-bold">${p} <span class="text-base font-normal">(${maxCount}개)</span></p>`).join('')}</div>`;
+            } else {
+                document.getElementById('potm-content').innerHTML = `<p>이번 달 기록이 아직 없습니다.</p>`;
+            }
+
+            // 2. 이달의 최고 평점 패키지
+            const allMonthlyPackages = monthlyPackageRecords.flatMap(rec => 
+                (rec.packages || []).map(pkg => ({ ...pkg, presentationId: rec.id, presenter: rec.presenter }))
+            );
+
+            const ratedPackages = allMonthlyPackages.filter(p => p.ratings && p.ratings.length > 0);
+            if (ratedPackages.length > 0) {
+                let bestPackage = null;
+                let maxAvg = -1;
+
+                ratedPackages.forEach(pkg => {
+                    const avg = getPackageAvgRating(pkg).avg;
+                    if (avg > maxAvg) {
+                        maxAvg = avg;
+                        bestPackage = pkg;
+                    }
+                });
+
+                if (bestPackage) {
+                    document.getElementById('lpm-content').innerHTML = `
+                        <a href="${bestPackage.link}" target="_blank" class="block hover:bg-teal-700 p-1 rounded">
+                            <p class="text-lg font-bold truncate">${bestPackage.title}</p>
+                            <p class="text-sm font-normal">${bestPackage.presenter}</p>
+                            <p class="text-xl font-bold mt-1">★ ${maxAvg.toFixed(1)}</p>
+                        </a>`;
+                } else {
+                     document.getElementById('lpm-content').innerHTML = `<p>평가된 패키지가 없습니다.</p>`;
+                }
+            } else {
+                document.getElementById('lpm-content').innerHTML = `<p>이번 달 기록이 아직 없습니다.</p>`;
+            }
         };
 
         const openModal = (modalEl) => modalEl.classList.replace('hidden', 'flex');
@@ -609,18 +847,55 @@
             openModal(errorModal);
         };
 
-        const showDetailPopupAndScroll = (presentationId, feedbackId) => {
+        const showDetailPopupAndScroll = (presentationId, feedbackIdOrPackageIndex) => {
             const presentation = records.find(r => r.id == presentationId);
             if (!presentation) return;
-            const isTraining = presentation.isTraining || false;
             const detailContent = document.getElementById('p-detail-content');
             
-            const createPopupFeedbackHTML = (f) => {
+            const createRatingsListHTML = (ratings, presentationId, packageIndex) => {
+                if (!ratings || ratings.length === 0) {
+                    return '<p class="text-sm text-stone-500 p-2">아직 코멘트가 없습니다.</p>';
+                }
+                return ratings.map(r => {
+                     const commenter = r.commenter || '익명';
+                     const comment = r.comment || '코멘트 없음';
+                     const score = r.score;
+                     const createdAt = r.createdAt;
+
+                     let starsHTML = '';
+                     if (typeof score === 'number') {
+                         for(let i = 1; i <= 5; i++) {
+                             if (score >= i) starsHTML += '<span class="star full">★</span>';
+                             else starsHTML += '<span class="star empty">★</span>';
+                         }
+                     }
+                     
+                     const scoreText = typeof score === 'number' ? `(${score})` : '';
+
+                     return `
+                     <div class="text-sm p-2 border-t border-stone-200 first:border-t-0">
+                         <div class="flex justify-between items-center">
+                             <p class="font-bold">${commenter} <span class="star-display text-amber-500 ml-2">${starsHTML}</span> ${scoreText}</p>
+                             <div class="flex items-center gap-2">
+                                <span class="text-xs text-stone-400">${createdAt ? new Date(createdAt).toLocaleString() : ''}</span>
+                                <button data-action="delete-package-comment" data-pid="${presentationId}" data-pindex="${packageIndex}" data-cid="${r.id}" class="text-stone-400 hover:text-red-500 text-lg">&times;</button>
+                             </div>
+                         </div>
+                         <p class="mt-1 text-stone-700">${comment}</p>
+                     </div>
+                     `;
+                 }).join('');
+            };
+
+            const createPopupFeedbackHTML = (f, isTraining) => {
+                const id = f.id || (Date.now() + Math.random());
+                const commenter = f.commenter || '익명';
+
                 if (isTraining) {
                      return `
-                    <div id="popup-feedback-${f.id}" class="text-sm p-3 border rounded-md bg-white">
+                    <div id="popup-feedback-${id}" class="text-sm p-3 border rounded-md bg-white">
                         <div class="flex justify-between items-center">
-                            <p class="font-bold">${f.commenter}</p>
+                            <p class="font-bold">${commenter}</p>
                         </div>
                         <div class="mt-2 pt-2 border-t text-stone-600 space-y-1">
                             <p><strong>종합 코멘트:</strong> ${f.comment || 'N/A'}</p>
@@ -628,35 +903,101 @@
                         </div>
                     </div>`;
                 }
-                let starsHTML = '';
-                for(let i = 1; i <= 5; i++) {
-                    if (f.rating >= i) starsHTML += '<span class="star full">★</span>';
-                    else if (f.rating >= i - 0.5) starsHTML += '<span class="star half">★</span>';
-                    else starsHTML += '<span class="star empty">★</span>';
+
+                const isNewFormat = f.hasOwnProperty('strengths') || f.hasOwnProperty('improvements') || f.hasOwnProperty('reason');
+
+                if (isNewFormat) {
+                    let starsHTML = '';
+                    for(let i = 1; i <= 5; i++) {
+                        if (f.rating >= i) starsHTML += '<span class="star full">★</span>';
+                        else if (f.rating >= i - 0.5) starsHTML += '<span class="star half">★</span>';
+                        else starsHTML += '<span class="star empty">★</span>';
+                    }
+                    return `
+                    <div id="popup-feedback-${id}" class="text-sm p-3 border rounded-md bg-white">
+                        <div class="flex justify-between items-center">
+                            <p class="font-bold">${commenter} <span class="star-display text-amber-500 ml-2">${starsHTML}</span> (${f.rating})</p>
+                        </div>
+                        <div class="mt-2 pt-2 border-t text-stone-600 space-y-1">
+                            <p><strong>잘한 점:</strong> ${f.strengths || 'N/A'}</p>
+                            <p><strong>보완할 점:</strong> ${f.improvements || 'N/A'}</p>
+                            <p><strong>마케팅 활용요소:</strong> ${f.marketingMemo || 'N/A'}</p>
+                            <p><strong>종합 코멘트:</strong> ${f.reason || 'N/A'}</p>
+                        </div>
+                    </div>`;
+                } else { // Handle old, simple feedback format
+                    const commentText = f.comment || f.reason || '코멘트 없음';
+                    let starsHTML = '';
+                    if (typeof f.rating === 'number') {
+                        for(let i = 1; i <= 5; i++) {
+                            if (f.rating >= i) starsHTML += '<span class="star full">★</span>';
+                            else if (f.rating >= i - 0.5) starsHTML += '<span class="star half">★</span>';
+                            else starsHTML += '<span class="star empty">★</span>';
+                        }
+                    }
+                     return `
+                    <div id="popup-feedback-${id}" class="text-sm p-3 border rounded-md bg-white">
+                        <div class="flex justify-between items-center">
+                            <p class="font-bold">${commenter} <span class="star-display text-amber-500 ml-2">${starsHTML}</span> ${typeof f.rating === 'number' ? `(${f.rating})` : ''}</p>
+                        </div>
+                        <div class="mt-2 pt-2 border-t text-stone-600 space-y-1">
+                            <p>${commentText}</p>
+                        </div>
+                    </div>`;
                 }
-                return `
-                <div id="popup-feedback-${f.id}" class="text-sm p-3 border rounded-md bg-white">
-                    <div class="flex justify-between items-center">
-                        <p class="font-bold">${f.commenter} <span class="star-display text-amber-500 ml-2">${starsHTML}</span> (${f.rating})</p>
+            };
+
+            let bottomSectionHTML;
+            let bottomSectionTitle;
+
+            if (presentation.type === 'package_submission') {
+                bottomSectionTitle = '패키지 목록';
+                bottomSectionHTML = (presentation.packages || []).map((pkg, index) => {
+                    const ratingInfo = getPackageAvgRating(pkg);
+                    return `
+                    <div class="mt-4 pt-4 border-t first:mt-0 first:pt-0 first:border-t-0" id="popup-package-${index}">
+                        <div class="p-3 rounded-md bg-stone-100">
+                            <div class="flex justify-between items-center">
+                                <h4 class="font-bold text-lg">${pkg.title}</h4>
+                                <div class="text-amber-500 font-bold">★ ${ratingInfo.avg.toFixed(1)} <span class="text-xs text-stone-500 font-normal">(${ratingInfo.count}개 코멘트)</span></div>
+                            </div>
+                            <a href="${pkg.link}" target="_blank" class="text-sm text-blue-600 hover:underline break-all">${pkg.link}</a>
+                            <div class="mt-3 space-y-1">
+                                <h5 class="font-semibold text-sm">코멘트 내역</h5>
+                                ${createRatingsListHTML(pkg.ratings, presentation.id, index)}
+                            </div>
+                        </div>
                     </div>
-                    <div class="mt-2 pt-2 border-t text-stone-600 space-y-1">
-                        <p><strong>잘한 점:</strong> ${f.strengths || 'N/A'}</p>
-                        <p><strong>보완할 점:</strong> ${f.improvements || 'N/A'}</p>
-                        <p><strong>마케팅 활용요소:</strong> ${f.marketingMemo || 'N/A'}</p>
-                        <p><strong>종합 코멘트:</strong> ${f.reason || 'N/A'}</p>
-                    </div>
-                </div>
-            `};
-            
-            let commentsHTML = (presentation.feedbacks || []).map(f => createPopupFeedbackHTML(f)).join('') || '<p>코멘트가 없습니다.</p>';
+                    `;
+                }).join('') || '<p>등록된 패키지가 없습니다.</p>';
+            } else {
+                const isTraining = presentation.isTraining || false;
+                // For backward compatibility, check old feedback fields too.
+                const feedbackArray = [
+                    ...(presentation.feedbacks || []),
+                    ...(presentation.feedback || []),
+                    ...(presentation.comments || [])
+                ];
+                bottomSectionTitle = '코멘트 목록';
+                let commentsHTML = feedbackArray.length > 0
+                    ? feedbackArray.map(f => createPopupFeedbackHTML(f, isTraining)).join('')
+                    : '<p>코멘트가 없습니다.</p>';
+                bottomSectionHTML = `<div class="mt-2 space-y-3">${commentsHTML}</div>`;
+            }
+
             let imagesHTML = (presentation.images || []).map(src => `<img src="${src}" class="max-w-xs my-2 rounded cursor-pointer hover:opacity-80" data-action="open-lightbox">`).join('');
-            let filesHTML = (presentation.files || []).map(name => `<li class="text-sm">${name}</li>`).join('');
+            let filesHTML = (presentation.files || []).map(fileInfo => {
+                if (typeof fileInfo === 'string') { // backwards compatibility for old data
+                    return `<li class="text-sm">${fileInfo}</li>`;
+                }
+                return `<li class="text-sm"><a href="${fileInfo.url}" target="_blank" class="text-blue-600 hover:underline">${fileInfo.name}</a></li>`;
+            }).join('');
 
             detailContent.innerHTML = `
                 <h3 class="text-2xl font-bold text-teal-700">${presentation.topic}</h3>
                 <p class="text-sm text-stone-500">${presentation.date} / ${presentation.presenter}</p>
                 <div class="mt-4 pt-4 border-t">
-                    <h4 class="font-bold">발표 내용</h4>
+                    <h4 class="font-bold">${presentation.type === 'package_submission' ? '등록 내용' : '발표 내용'}</h4>
                     <p class="mt-1 whitespace-pre-wrap">${linkify(presentation.content)}</p>
                 </div>
                 <div class="mt-4 pt-4 border-t">
@@ -666,19 +1007,25 @@
                 ${imagesHTML ? `<div class="mt-4 pt-4 border-t"><h4 class="font-bold">첨부 이미지</h4><div class="flex flex-wrap gap-2 mt-2">${imagesHTML}</div></div>` : ''}
                 ${filesHTML ? `<div class="mt-4 pt-4 border-t"><h4 class="font-bold">첨부 파일</h4><ul class="list-disc list-inside mt-2">${filesHTML}</ul></div>` : ''}
                 <div class="mt-4 pt-4 border-t">
-                    <h4 class="font-bold">코멘트 목록</h4>
-                    <div class="mt-2 space-y-3">${commentsHTML}</div>
+                    <h4 class="font-bold text-xl">${bottomSectionTitle}</h4>
+                    ${bottomSectionHTML}
                 </div>
             `;
             openModal(detailModal);
             
-            if (feedbackId) {
+            if (feedbackIdOrPackageIndex !== null && feedbackIdOrPackageIndex !== undefined) {
                 setTimeout(() => {
-                    const targetComment = document.getElementById(`popup-feedback-${feedbackId}`);
-                    if (targetComment) {
-                        targetComment.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        targetComment.classList.add('highlight-scroll');
-                        setTimeout(() => targetComment.classList.remove('highlight-scroll'), 2000);
+                    let targetElement;
+                    if (presentation.type === 'package_submission') {
+                        targetElement = document.getElementById(`popup-package-${feedbackIdOrPackageIndex}`);
+                    } else {
+                        targetElement = document.getElementById(`popup-feedback-${feedbackIdOrPackageIndex}`);
+                    }
+
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        targetElement.classList.add('highlight-scroll');
+                        setTimeout(() => targetElement.classList.remove('highlight-scroll'), 2000);
                     }
                 }, 100);
             }
@@ -688,6 +1035,67 @@
             presentationModal.querySelector('form').reset();
             document.getElementById('p-date').valueAsDate = new Date();
             openModal(presentationModal);
+        });
+
+        document.getElementById('add-package-btn').addEventListener('click', () => {
+            const form = packageSubmissionModal.querySelector('form');
+            form.reset();
+            document.getElementById('ps-package-inputs-container').innerHTML = '';
+            
+            const monthSelect = document.getElementById('ps-month');
+            monthSelect.innerHTML = '';
+            for (let i = 1; i <= 12; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = `${i}월`;
+                monthSelect.appendChild(option);
+            }
+            const currentMonth = new Date().getMonth() + 1;
+            monthSelect.value = currentMonth;
+
+            addPackageInput();
+            updatePackageSubmissionTitle();
+            openModal(packageSubmissionModal);
+        });
+
+        const addPackageInput = () => {
+            const container = document.getElementById('ps-package-inputs-container');
+            const newPackageGroup = document.createElement('div');
+            newPackageGroup.className = 'package-input-group p-3 border rounded-md bg-stone-50 relative';
+            newPackageGroup.innerHTML = `
+                <button type="button" class="absolute top-1 right-1 text-red-500 hover:text-red-700" onclick="this.parentElement.remove(); window.updatePackageSubmissionTitle();">&times;</button>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div class="sm:col-span-1"><label class="text-sm font-medium">패키지 제목</label><input type="text" name="ps-package-title" class="mt-1 block w-full border-stone-300 rounded-md shadow-sm text-sm" required></div>
+                    <div class="sm:col-span-1"><label class="text-sm font-medium">패키지 링크</label><input type="url" name="ps-package-link" class="mt-1 block w-full border-stone-300 rounded-md shadow-sm text-sm" required></div>
+                    <div class="sm:col-span-1">
+                        <label class="text-sm font-medium">국가</label>
+                        <select name="ps-package-country" class="mt-1 block w-full border-stone-300 rounded-md shadow-sm text-sm" required>
+                            <option value="">선택</option>
+                            ${REGIONS.map(r => `<option value="${r}">${r}</option>`).join('')}
+                        </select>
+                    </div>
+                </div>
+            `;
+            container.appendChild(newPackageGroup);
+            
+            newPackageGroup.querySelector('select[name="ps-package-country"]').addEventListener('change', updatePackageSubmissionTitle);
+        };
+        window.updatePackageSubmissionTitle = () => {
+            const month = document.getElementById('ps-month').value;
+            const week = document.getElementById('ps-week').value;
+            
+            const countrySelects = document.querySelectorAll('select[name="ps-package-country"]');
+            const selectedCountries = [...countrySelects].map(select => select.value).filter(value => value !== '');
+            const uniqueCountries = [...new Set(selectedCountries)];
+            const countriesString = uniqueCountries.join(',');
+
+            document.getElementById('ps-topic').value = `${month}월 ${week} 패키지 등록_${countriesString}`;
+        };
+
+        document.getElementById('add-package-input-btn').addEventListener('click', addPackageInput);
+
+        ['ps-month', 'ps-week'].forEach(id => {
+            document.getElementById(id).addEventListener('change', window.updatePackageSubmissionTitle);
         });
 
         document.getElementById('manage-announcements-btn').addEventListener('click', async () => {
@@ -720,17 +1128,31 @@
         
         document.getElementById('error-ok-btn').addEventListener('click', () => closeModal(errorModal));
 
+        const initializeFilters = () => {
+            const presenters = [...new Set(records.map(r => r.presenter).filter(Boolean))].sort();
+            const presenterFilter = document.getElementById('filter-presenter');
+            presenterFilter.innerHTML = '<option value="">모두 보기</option>'; // Reset
+            presenters.forEach(p => {
+                const option = document.createElement('option');
+                option.value = p;
+                option.textContent = p;
+                presenterFilter.appendChild(option);
+            });
+        };
+
         document.addEventListener('click', async e => {
             const action = e.target.dataset.action;
             const card = e.target.closest('.card');
 
             if (action === 'toggle-card') {
                 card.classList.toggle('open');
-                e.target.textContent = card.classList.contains('open') ? '코멘트 닫기' : '코멘트 열기';
+                const cardType = card.dataset.cardType;
+                const text = cardType === 'package' ? '패키지' : '코멘트';
+                e.target.textContent = card.classList.contains('open') ? `${text} 닫기` : `${text} 열기`;
             }
             else if (action === 'delete-presentation') {
                 const presentationId = e.target.dataset.id;
-                showConfirmModal('이 발표 기록을 정말 삭제하시겠습니까?', async () => {
+                showConfirmModal('이 기록을 정말 삭제하시겠습니까?', async () => {
                     try {
                         await deleteDoc(doc(presentationsCollection, presentationId));
                     } catch (error) {
@@ -745,9 +1167,20 @@
                 showConfirmModal('이 코멘트를 삭제하시겠습니까?', async () => {
                     const presentation = records.find(r => r.id == pId);
                     if(presentation) {
-                        const updatedFeedbacks = (presentation.feedbacks || []).filter(f => f.id != fId);
+                        // Handle all possible feedback fields for deletion
+                        const updatedData = {};
+                        if (presentation.feedbacks) {
+                            updatedData.feedbacks = presentation.feedbacks.filter(f => String(f.id) !== String(fId));
+                        }
+                        if (presentation.feedback) {
+                            updatedData.feedback = presentation.feedback.filter(f => String(f.id) !== String(fId));
+                        }
+                        if (presentation.comments) {
+                            updatedData.comments = presentation.comments.filter(f => String(f.id) !== String(fId));
+                        }
+
                         try {
-                            await setDoc(doc(presentationsCollection, pId), { feedbacks: updatedFeedbacks }, { merge: true });
+                            await setDoc(doc(presentationsCollection, pId), updatedData, { merge: true });
                         } catch (error) {
                              console.error("Error deleting comment: ", error);
                              showErrorModal("코멘트 삭제 중 오류가 발생했습니다.");
@@ -775,6 +1208,43 @@
                 const pId = e.target.closest('[data-pid]').dataset.pid;
                 const fId = e.target.closest('[data-fid]').dataset.fid;
                 showDetailPopupAndScroll(pId, fId);
+            }
+            else if (action === 'view-package-ratings') {
+                const pId = e.target.dataset.pid;
+                const pIndex = e.target.dataset.pindex;
+                showDetailPopupAndScroll(pId, pIndex);
+            }
+            else if (action === 'delete-package-comment') {
+                const pId = e.target.dataset.pid;
+                const pIndex = parseInt(e.target.dataset.pindex, 10);
+                const cId = e.target.dataset.cid;
+                showConfirmModal('이 코멘트를 정말 삭제하시겠습니까?', async () => {
+                    const presentation = records.find(r => r.id === pId);
+                    if (presentation && presentation.packages && presentation.packages[pIndex]) {
+                        const updatedPackages = [...presentation.packages];
+                        updatedPackages[pIndex].ratings = updatedPackages[pIndex].ratings.filter(r => r.id !== cId);
+                        try {
+                            await setDoc(doc(presentationsCollection, pId), { packages: updatedPackages }, { merge: true });
+                            showDetailPopupAndScroll(pId, pIndex); // Refresh the popup
+                        } catch (error) {
+                            showErrorModal("코멘트 삭제 중 오류가 발생했습니다.");
+                        }
+                    }
+                });
+            }
+            else if (action === 'rate-package') {
+                const pId = e.target.dataset.pid;
+                const pIndex = e.target.dataset.pindex;
+                const presentation = records.find(r => r.id === pId);
+                const pkg = presentation.packages[pIndex];
+
+                const form = packageRatingModal.querySelector('form');
+                form.reset();
+                document.getElementById('pr-rating-display').textContent = '0';
+                document.getElementById('pr-presentation-id').value = pId;
+                document.getElementById('pr-package-index').value = pIndex;
+                document.getElementById('pr-package-title').textContent = pkg.title;
+                openModal(packageRatingModal);
             }
             else if (action === 'open-lightbox') {
                 const lightboxModal = document.getElementById('lightbox-modal');
@@ -813,6 +1283,24 @@
                  return;
             }
             
+            const fileInfos = [];
+            try {
+                for (const file of otherFiles) {
+                    if (file.size > 5 * 1024 * 1024) { // 5MB limit
+                        showErrorModal(`파일 크기는 5MB를 초과할 수 없습니다: ${file.name}`);
+                        return;
+                    }
+                    const storageRef = ref(storage, `attachments/${userId}/${Date.now()}-${file.name}`);
+                    const snapshot = await uploadBytes(storageRef, file);
+                    const downloadURL = await getDownloadURL(snapshot.ref);
+                    fileInfos.push({ name: file.name, url: downloadURL });
+                }
+            } catch (error) {
+                console.error("File upload error: ", error);
+                showErrorModal("파일 업로드 중 오류가 발생했습니다.");
+                return;
+            }
+
             const newPresentation = {
                 date: document.getElementById('p-date').value,
                 presenter: document.getElementById('p-presenter').value,
@@ -822,8 +1310,9 @@
                 keywords: document.getElementById('p-keywords').value,
                 isTraining: document.getElementById('p-is-training').checked,
                 images: imageDataUrls,
-                files: otherFiles.map(f => f.name),
-                feedbacks: []
+                files: fileInfos,
+                feedbacks: [],
+                type: 'presentation' // Add type field
             };
             
             try {
@@ -837,6 +1326,47 @@
                 } else {
                     showErrorModal("데이터 저장 중 오류가 발생했습니다.");
                 }
+            }
+        });
+
+        packageSubmissionModal.querySelector('form').addEventListener('submit', async e => {
+            e.preventDefault();
+
+            const packages = [];
+            const packageContainers = document.querySelectorAll('#ps-package-inputs-container .package-input-group');
+            let allFieldsValid = true;
+            packageContainers.forEach(container => {
+                const title = container.querySelector('input[name="ps-package-title"]').value;
+                const link = container.querySelector('input[name="ps-package-link"]').value;
+                const country = container.querySelector('select[name="ps-package-country"]').value;
+                if (title && link && country) {
+                    packages.push({ title, link, country, ratings: [] });
+                } else {
+                    allFieldsValid = false;
+                }
+            });
+
+            if (!allFieldsValid || packages.length === 0) {
+                showErrorModal("모든 패키지 정보를 (제목, 링크, 국가) 입력해주세요.");
+                return;
+            }
+
+            const newSubmission = {
+                type: 'package_submission',
+                date: new Date().toISOString().split('T')[0], // For sorting
+                presenter: document.getElementById('ps-presenter').value,
+                topic: document.getElementById('ps-topic').value,
+                packages: packages,
+                createdAt: new Date()
+            };
+
+            try {
+                await addDoc(presentationsCollection, newSubmission);
+                closeModal(packageSubmissionModal);
+                currentPage = 1;
+            } catch (error) {
+                console.error("Error adding package submission: ", error);
+                showErrorModal("패키지 등록 중 오류가 발생했습니다.");
             }
         });
 
@@ -893,6 +1423,37 @@
             }
         });
         
+        packageRatingModal.querySelector('form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const presentationId = document.getElementById('pr-presentation-id').value;
+            const packageIndex = parseInt(document.getElementById('pr-package-index').value);
+            const presentation = records.find(r => r.id == presentationId);
+            if (!presentation) return;
+
+            const newRating = {
+                id: Date.now().toString(),
+                commenter: document.getElementById('pr-commenter').value,
+                score: parseFloat(document.querySelector('input[name="pr-rating"]:checked')?.value || 0),
+                comment: document.getElementById('pr-comment').value,
+                createdAt: new Date().toISOString()
+            };
+
+            const updatedPackages = [...presentation.packages];
+            if (!updatedPackages[packageIndex].ratings) {
+                updatedPackages[packageIndex].ratings = [];
+            }
+            updatedPackages[packageIndex].ratings.push(newRating);
+
+            try {
+                const docRef = doc(presentationsCollection, presentationId);
+                await setDoc(docRef, { packages: updatedPackages }, { merge: true });
+                closeModal(packageRatingModal);
+            } catch (error) {
+                console.error("Error adding package rating: ", error);
+                showErrorModal("패키지 평가 저장 중 오류가 발생했습니다.");
+            }
+        });
+        
         announcementModal.querySelector('form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const presentersText = document.getElementById('np-presenters').value;
@@ -911,10 +1472,28 @@
             document.getElementById('f-rating-display').textContent = e.target.value;
         });
 
+        document.getElementById('pr-rating').addEventListener('change', e => {
+             document.getElementById('pr-rating-display').textContent = e.target.value;
+        });
+
+        document.getElementById('search-input').addEventListener('input', (e) => {
+            currentSearchTerm = e.target.value;
+            currentPage = 1;
+            renderRecords();
+        });
+
+        document.getElementById('filter-presenter').addEventListener('change', (e) => {
+            currentFilterPresenter = e.target.value;
+            currentPage = 1;
+            renderRecords();
+        });
+
         function init() {
             renderRecords();
             renderAnalytics();
             updateHighlightCards();
+            renderWeeklySubmitters();
+            initializeFilters();
         }
     </script>
 </body>
